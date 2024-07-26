@@ -22,10 +22,11 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 from routes import *
 
 from models.user import User
+from models.session import Session
 
 from utils import log
 
-main = Blueprint('index', __name__)
+main = Blueprint('user', __name__)
 
  
 @main.route("/register", methods=['POST'])
@@ -43,19 +44,31 @@ def login():
     form = request.get_json()
     u = User.validate_login(form)
     if u is None:
-        return jsonify({'msg': '登录失败', "code": 201, })
-    else:
-        session['user_id'] = u.id
-        session.permanent = True  # 设置 session 为永久
-        token = create_access_token(identity=u.id)
-        signature = token[:50];
-        User.update(u.id,  signature=signature)
         return HTTPHelper.generate_response(
-            code=ErrCode.ERROR_SUCCESS,
-            msg='登录成功',
-            data=u.to_dict(),
-            token= str(token)
+            code=ErrCode.ERROR_USER_NOT_EXISTS,
+            msg='登录失败',
         )
+    else:
+        # Session.new(form, user_id=u.id)
+        token = create_access_token(identity=u.id)
+        # session_form = {
+        #     "user_id": u.id,
+        #     "token": token,
+        # }
+        # if u.session_id:
+            # 这里需要更新
+        # session['user_id'] = u.id
+        # session.permanent = True  # 设置 session 为永久
+       
+        # signature = token[:50];
+        # User.update(u.id,  signature=signature)
+        # return HTTPHelper.generate_response(
+        #     code=ErrCode.ERROR_SUCCESS,
+        #     msg='登录成功',
+        #     data=u.to_dict(),
+        #     token= str(token)
+        # )
+        pass
 
 
 @main.route('/profile')

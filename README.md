@@ -10,7 +10,6 @@
 
 ### 需求拆分
 
-
 登录注册
 
 1. 登录接口
@@ -69,10 +68,7 @@ CRUD 用户
 
 3. 删除用户
 
-
 ### 数据库设计
-
- 
 
 ### 用户表 (`user`)
 
@@ -85,10 +81,10 @@ CRUD 用户
 | username       | VARCHAR(255) | 用户名                   |
 | email          | VARCHAR(255) | 邮箱                     |
 | password       | VARCHAR(255) | 密码                     |
-| session_id     | INT          | 关联的会话ID             |
+| session_id     | INT          | 关联的会话 ID            |
 | role           | ENUM         | 角色（普通用户、管理员） |
 | signature      | TEXT         | 签名                     |
-| avatar         | VARCHAR(255) | 头像URL                  |
+| avatar         | VARCHAR(255) | 头像 URL                 |
 | phone_number   | VARCHAR(20)  | 电话号码                 |
 | last_login     | DATETIME     | 最后登录时间             |
 | email_verified | BOOLEAN      | 邮箱是否验证             |
@@ -103,7 +99,7 @@ CRUD 用户
 | ut         | DATETIME     | 更新时间           |
 | status     | ENUM         | 状态（下线、上线） |
 | token      | VARCHAR(255) | 会话令牌           |
-| user_id    | INT          | 关联的用户ID       |
+| user_id    | INT          | 关联的用户 ID      |
 | expires_at | DATETIME     | 会话过期时间       |
 
 ### 板块表 (`board`)
@@ -126,8 +122,8 @@ CRUD 用户
 | ut            | DATETIME     | 更新时间           |
 | status        | ENUM         | 状态（下线、上线） |
 | is_top        | BOOLEAN      | 是否置顶           |
-| user_id       | INT          | 关联的用户ID       |
-| board_id      | INT          | 关联的板块ID       |
+| user_id       | INT          | 关联的用户 ID      |
+| board_id      | INT          | 关联的板块 ID      |
 | views         | INT          | 浏览量             |
 | title         | VARCHAR(255) | 标题               |
 | content       | TEXT         | 内容               |
@@ -143,8 +139,8 @@ CRUD 用户
 | ct         | DATETIME | 创建时间           |
 | ut         | DATETIME | 更新时间           |
 | status     | ENUM     | 状态（下线、上线） |
-| user_id    | INT      | 关联的用户ID       |
-| topic_id   | INT      | 关联的话题ID       |
+| user_id    | INT      | 关联的用户 ID      |
+| topic_id   | INT      | 关联的话题 ID      |
 | content    | TEXT     | 内容               |
 | like_count | INT      | 点赞数量           |
 
@@ -158,17 +154,14 @@ CRUD 用户
 | status      | ENUM         | 状态（下线、上线）      |
 | title       | VARCHAR(255) | 标题                    |
 | content     | TEXT         | 内容                    |
-| sender_id   | INT          | 发件人ID                |
-| receiver_id | INT          | 收件人ID                |
+| sender_id   | INT          | 发件人 ID               |
+| receiver_id | INT          | 收件人 ID               |
 | read        | BOOLEAN      | 是否已读                |
 | attachments | TEXT         | 附件（JSON 或 VARCHAR） |
 
-
-
-
 ### 接口设计
 
-  接口设计
+接口设计
 
 #### 1. 用户接口
 
@@ -178,31 +171,31 @@ CRUD 用户
 
 - **方法**: `POST`
 
-- 请求参数  :
+- 请求参数 :
 
   ```json
   {
-      "email": "user@example.com",
-      "password": "password123"
+    "email": "user@example.com",
+    "password": "password123"
   }
   ```
 
-- 响应参数  :
+- 响应参数 :
 
-  ```  json
+  ```json
   {
-      "msg": "登录成功",
-      "code": 200,
-      "data": {
-          "token": "session_token",
-          "user": {
-              "id": 1,
-              "email": "user@example.com",
-              "username": "username",
-              "avatar": "avatar_url",
-              "role": "普通用户"
-          }
+    "msg": "登录成功",
+    "code": 200,
+    "data": {
+      "token": "session_token",
+      "user": {
+        "id": 1,
+        "email": "user@example.com",
+        "username": "username",
+        "avatar": "avatar_url",
+        "role": "普通用户"
       }
+    }
   }
   ```
 
@@ -212,31 +205,31 @@ CRUD 用户
 
 - **方法**: `POST`
 
-- 请求参数  :
+- 请求参数 :
 
-  ```  json
+  ```json
   {
-      "email": "user@example.com",
-      "password": "password123",
-      "username": "username"
+    "email": "user@example.com",
+    "password": "password123",
+    "username": "username"
   }
   ```
 
-- 响应参数  :
+- 响应参数 :
 
-  ```  json
+  ```json
   {
-      "msg": "注册成功",
-      "code": 201,
-      "data": {
-          "user": {
-              "id": 1,
-              "email": "user@example.com",
-              "username": "username",
-              "avatar": "avatar_url",
-              "role": "普通用户"
-          }
+    "msg": "注册成功",
+    "code": 201,
+    "data": {
+      "user": {
+        "id": 1,
+        "email": "user@example.com",
+        "username": "username",
+        "avatar": "avatar_url",
+        "role": "普通用户"
       }
+    }
   }
   ```
 
@@ -246,28 +239,28 @@ CRUD 用户
 
 - **方法**: `GET`
 
-- 请求参数  :
+- 请求参数 :
 
   - Headers: `Authorization: Bearer {token}`
 
-- 响应参数  :
+- 响应参数 :
 
-  ```  json
+  ```json
   {
-      "msg": "获取成功",
-      "code": 200,
-      "data": {
-          "user": {
-              "id": 1,
-              "email": "user@example.com",
-              "username": "username",
-              "avatar": "avatar_url",
-              "role": "普通用户",
-              "signature": "签名",
-              "phone_number": "1234567890",
-              "bio": "个人简介"
-          }
+    "msg": "获取成功",
+    "code": 200,
+    "data": {
+      "user": {
+        "id": 1,
+        "email": "user@example.com",
+        "username": "username",
+        "avatar": "avatar_url",
+        "role": "普通用户",
+        "signature": "签名",
+        "phone_number": "1234567890",
+        "bio": "个人简介"
       }
+    }
   }
   ```
 
@@ -277,35 +270,35 @@ CRUD 用户
 
 - **方法**: `PUT`
 
-- 请求参数  :
+- 请求参数 :
 
-  ```  json
+  ```json
   {
-      "username": "new_username",
-      "avatar": "new_avatar_url",
-      "signature": "new_signature",
-      "phone_number": "new_phone_number",
-      "bio": "new_bio"
+    "username": "new_username",
+    "avatar": "new_avatar_url",
+    "signature": "new_signature",
+    "phone_number": "new_phone_number",
+    "bio": "new_bio"
   }
   ```
 
-- 响应参数  :
+- 响应参数 :
 
-  ```  json
+  ```json
   {
-      "msg": "更新成功",
-      "code": 200,
-      "data": {
-          "user": {
-              "id": 1,
-              "email": "user@example.com",
-              "username": "new_username",
-              "avatar": "new_avatar_url",
-              "signature": "new_signature",
-              "phone_number": "new_phone_number",
-              "bio": "new_bio"
-          }
+    "msg": "更新成功",
+    "code": 200,
+    "data": {
+      "user": {
+        "id": 1,
+        "email": "user@example.com",
+        "username": "new_username",
+        "avatar": "new_avatar_url",
+        "signature": "new_signature",
+        "phone_number": "new_phone_number",
+        "bio": "new_bio"
       }
+    }
   }
   ```
 
@@ -315,16 +308,16 @@ CRUD 用户
 
 - **方法**: `DELETE`
 
-- 请求参数  :
+- 请求参数 :
 
   - Headers: `Authorization: Bearer {token}`
 
-- 响应参数  :
+- 响应参数 :
 
-  ```  json
+  ```json
   {
-      "msg": "删除成功",
-      "code": 200
+    "msg": "删除成功",
+    "code": 200
   }
   ```
 
@@ -336,28 +329,28 @@ CRUD 用户
 
 - **方法**: `POST`
 
-- 请求参数  :
+- 请求参数 :
 
-  ```  json
+  ```json
   {
-      "title": "板块标题",
-      "description": "板块描述"
+    "title": "板块标题",
+    "description": "板块描述"
   }
   ```
 
-- 响应参数  :
+- 响应参数 :
 
-  ```  json
+  ```json
   {
-      "msg": "创建成功",
-      "code": 201,
-      "data": {
-          "board": {
-              "id": 1,
-              "title": "板块标题",
-              "description": "板块描述"
-          }
+    "msg": "创建成功",
+    "code": 201,
+    "data": {
+      "board": {
+        "id": 1,
+        "title": "板块标题",
+        "description": "板块描述"
       }
+    }
   }
   ```
 
@@ -369,21 +362,21 @@ CRUD 用户
 
 - **请求参数**: 无
 
-- 响应参数  :
+- 响应参数 :
 
-  ```  json
+  ```json
   {
-      "msg": "获取成功",
-      "code": 200,
-      "data": {
-          "boards": [
-              {
-                  "id": 1,
-                  "title": "板块标题",
-                  "description": "板块描述"
-              }
-          ]
-      }
+    "msg": "获取成功",
+    "code": 200,
+    "data": {
+      "boards": [
+        {
+          "id": 1,
+          "title": "板块标题",
+          "description": "板块描述"
+        }
+      ]
+    }
   }
   ```
 
@@ -393,28 +386,28 @@ CRUD 用户
 
 - **方法**: `PUT`
 
-- 请求参数  :
+- 请求参数 :
 
-  ```  json
+  ```json
   {
-      "title": "新板块标题",
-      "description": "新板块描述"
+    "title": "新板块标题",
+    "description": "新板块描述"
   }
   ```
 
-- 响应参数  :
+- 响应参数 :
 
-  ```  json
+  ```json
   {
-      "msg": "更新成功",
-      "code": 200,
-      "data": {
-          "board": {
-              "id": 1,
-              "title": "新板块标题",
-              "description": "新板块描述"
-          }
+    "msg": "更新成功",
+    "code": 200,
+    "data": {
+      "board": {
+        "id": 1,
+        "title": "新板块标题",
+        "description": "新板块描述"
       }
+    }
   }
   ```
 
@@ -426,12 +419,12 @@ CRUD 用户
 
 - **请求参数**: 无
 
-- 响应参数  :
+- 响应参数 :
 
-  ```  json
+  ```json
   {
-      "msg": "删除成功",
-      "code": 200
+    "msg": "删除成功",
+    "code": 200
   }
   ```
 
@@ -443,34 +436,34 @@ CRUD 用户
 
 - **方法**: `POST`
 
-- 请求参数  :
+- 请求参数 :
 
-  ```  json
+  ```json
   {
-      "title": "话题标题",
-      "content": "话题内容",
-      "board_id": 1
+    "title": "话题标题",
+    "content": "话题内容",
+    "board_id": 1
   }
   ```
 
-- 响应参数  :
+- 响应参数 :
 
-  ```  json
+  ```json
   {
-      "msg": "创建成功",
-      "code": 201,
-      "data": {
-          "topic": {
-              "id": 1,
-              "title": "话题标题",
-              "content": "话题内容",
-              "board_id": 1,
-              "user_id": 1,
-              "is_top": false,
-              "views": 0,
-              "resolved": false
-          }
+    "msg": "创建成功",
+    "code": 201,
+    "data": {
+      "topic": {
+        "id": 1,
+        "title": "话题标题",
+        "content": "话题内容",
+        "board_id": 1,
+        "user_id": 1,
+        "is_top": false,
+        "views": 0,
+        "resolved": false
       }
+    }
   }
   ```
 
@@ -482,26 +475,26 @@ CRUD 用户
 
 - **请求参数**: 无
 
-- 响应参数  :
+- 响应参数 :
 
-  ```  json
+  ```json
   {
-      "msg": "获取成功",
-      "code": 200,
-      "data": {
-          "topics": [
-              {
-                  "id": 1,
-                  "title": "话题标题",
-                  "content": "话题内容",
-                  "board_id": 1,
-                  "user_id": 1,
-                  "is_top": false,
-                  "views": 100,
-                  "resolved": false
-              }
-          ]
-      }
+    "msg": "获取成功",
+    "code": 200,
+    "data": {
+      "topics": [
+        {
+          "id": 1,
+          "title": "话题标题",
+          "content": "话题内容",
+          "board_id": 1,
+          "user_id": 1,
+          "is_top": false,
+          "views": 100,
+          "resolved": false
+        }
+      ]
+    }
   }
   ```
 
@@ -511,32 +504,32 @@ CRUD 用户
 
 - **方法**: `PUT`
 
-- 请求参数  :
+- 请求参数 :
 
-  ```  json
+  ```json
   {
-      "title": "新话题标题",
-      "content": "新话题内容",
-      "is_top": true,
-      "resolved": true
+    "title": "新话题标题",
+    "content": "新话题内容",
+    "is_top": true,
+    "resolved": true
   }
   ```
 
-- 响应参数  :
+- 响应参数 :
 
-  ```  json
+  ```json
   {
-      "msg": "更新成功",
-      "code": 200,
-      "data": {
-          "topic": {
-              "id": 1,
-              "title": "新话题标题",
-              "content": "新话题内容",
-              "is_top": true,
-              "resolved": true
-          }
+    "msg": "更新成功",
+    "code": 200,
+    "data": {
+      "topic": {
+        "id": 1,
+        "title": "新话题标题",
+        "content": "新话题内容",
+        "is_top": true,
+        "resolved": true
       }
+    }
   }
   ```
 
@@ -548,12 +541,12 @@ CRUD 用户
 
 - **请求参数**: 无
 
-- 响应参数  :
+- 响应参数 :
 
-  ```  json
+  ```json
   {
-      "msg": "删除成功",
-      "code": 200
+    "msg": "删除成功",
+    "code": 200
   }
   ```
 
@@ -565,32 +558,32 @@ CRUD 用户
 
 - **方法**: `POST`
 
-- 请求参数  :
+- 请求参数 :
 
-  ```  json
+  ```json
   {
-      "title": "邮件标题",
-      "content": "邮件内容",
-      "receiver_id": 2
+    "title": "邮件标题",
+    "content": "邮件内容",
+    "receiver_id": 2
   }
   ```
 
-- 响应参数  :
+- 响应参数 :
 
-  ```  json
+  ```json
   {
-      "msg": "发送成功",
-      "code": 201,
-      "data": {
-          "mail": {
-              "id": 1,
-              "title": "邮件标题",
-              "content": "邮件内容",
-              "sender_id": 1,
-              "receiver_id": 2,
-              "read": false
-          }
+    "msg": "发送成功",
+    "code": 201,
+    "data": {
+      "mail": {
+        "id": 1,
+        "title": "邮件标题",
+        "content": "邮件内容",
+        "sender_id": 1,
+        "receiver_id": 2,
+        "read": false
       }
+    }
   }
   ```
 
@@ -602,24 +595,24 @@ CRUD 用户
 
 - **请求参数**: 无
 
-- 响应参数  :
+- 响应参数 :
 
-  ```  json
+  ```json
   {
-      "msg": "获取成功",
-      "code": 200,
-      "data": {
-          "mails": [
-              {
-                  "id": 1,
-                  "title": "邮件标题",
-                  "content": "邮件内容",
-                  "sender_id": 1,
-                  "receiver_id": 2,
-                  "read": false
-              }
-          ]
-      }
+    "msg": "获取成功",
+    "code": 200,
+    "data": {
+      "mails": [
+        {
+          "id": 1,
+          "title": "邮件标题",
+          "content": "邮件内容",
+          "sender_id": 1,
+          "receiver_id": 2,
+          "read": false
+        }
+      ]
+    }
   }
   ```
 
@@ -629,33 +622,32 @@ CRUD 用户
 
 - **方法**: `PUT`
 
-- 请求参数  :
+- 请求参数 :
 
- ```  json
-  {
+```json
+{
+  "read": true
+}
+```
+
+- 响应参数 :
+
+```json
+{
+  "msg": "更新成功",
+  "code": 200,
+  "data": {
+    "mail": {
+      "id": 1,
+      "title": "邮件标题",
+      "content": "邮件内容",
+      "sender_id": 1,
+      "receiver_id": 2,
       "read": true
+    }
   }
-  
- ```
-
-- 响应参数  :
-
-```  json
-  {
-      "msg": "更新成功",
-      "code": 200,
-      "data": {
-          "mail": {
-              "id": 1,
-              "title": "邮件标题",
-              "content": "邮件内容",
-              "sender_id": 1,
-              "receiver_id": 2,
-              "read": true
-          }
-      }
-  }
- ```
+}
+```
 
 #### 5. 评论接口
 
@@ -665,31 +657,30 @@ CRUD 用户
 
 - **方法**: `POST`
 
-- 请求参数  :
+- 请求参数 :
 
-  ```  json
-
+  ```json
   {
-      "topic_id": 1,
-      "content": "评论内容"
+    "topic_id": 1,
+    "content": "评论内容"
   }
   ```
 
-- 响应参数  :
+- 响应参数 :
 
-  ```  json
+  ```json
   {
-      "msg": "评论成功",
-      "code": 201,
-      "data": {
-          "reply": {
-              "id": 1,
-              "topic_id": 1,
-              "user_id": 1,
-              "content": "评论内容",
-              "like_count": 0
-          }
+    "msg": "评论成功",
+    "code": 201,
+    "data": {
+      "reply": {
+        "id": 1,
+        "topic_id": 1,
+        "user_id": 1,
+        "content": "评论内容",
+        "like_count": 0
       }
+    }
   }
   ```
 
@@ -699,31 +690,31 @@ CRUD 用户
 
 - **方法**: `GET`
 
-- 请求参数  :
+- 请求参数 :
 
-  ```  json
+  ```json
   {
-      "topic_id": 1
+    "topic_id": 1
   }
   ```
 
-- 响应参数  :
+- 响应参数 :
 
-  ```  json
+  ```json
   {
-      "msg": "获取成功",
-      "code": 200,
-      "data": {
-          "replies": [
-              {
-                  "id": 1,
-                  "topic_id": 1,
-                  "user_id": 1,
-                  "content": "评论内容",
-                  "like_count": 0
-              }
-          ]
-      }
+    "msg": "获取成功",
+    "code": 200,
+    "data": {
+      "replies": [
+        {
+          "id": 1,
+          "topic_id": 1,
+          "user_id": 1,
+          "content": "评论内容",
+          "like_count": 0
+        }
+      ]
+    }
   }
   ```
 
@@ -735,24 +726,24 @@ CRUD 用户
 
 - 请求参数:
 
-  ```  json
+  ```json
   {
-      "content": "更新后的评论内容"
+    "content": "更新后的评论内容"
   }
   ```
 
-- 响应参数  :
+- 响应参数 :
 
   ```json
   {
-      "msg": "更新成功",
-      "code": 200,
-      "data": {
-          "reply": {
-              "id": 1,
-              "content": "更新后的评论内容"
-          }
+    "msg": "更新成功",
+    "code": 200,
+    "data": {
+      "reply": {
+        "id": 1,
+        "content": "更新后的评论内容"
       }
+    }
   }
   ```
 
@@ -766,13 +757,12 @@ CRUD 用户
 
 - 响应参数:
 
- ```json
-   
-  {
-      "msg": "删除成功",
-      "code": 200
-  }
-  ```
+```json
+{
+  "msg": "删除成功",
+  "code": 200
+}
+```
 
 #### 6. 用户管理接口
 
@@ -788,22 +778,22 @@ CRUD 用户
 
   ```json
   {
-      "msg": "获取成功",
-      "code": 200,
-      "data": {
-          "users": [
-              {
-                  "id": 1,
-                  "email": "user@example.com",
-                  "username": "username",
-                  "avatar": "avatar_url",
-                  "role": "普通用户",
-                  "signature": "签名",
-                  "phone_number": "1234567890",
-                  "bio": "个人简介"
-              }
-          ]
-      }
+    "msg": "获取成功",
+    "code": 200,
+    "data": {
+      "users": [
+        {
+          "id": 1,
+          "email": "user@example.com",
+          "username": "username",
+          "avatar": "avatar_url",
+          "role": "普通用户",
+          "signature": "签名",
+          "phone_number": "1234567890",
+          "bio": "个人简介"
+        }
+      ]
+    }
   }
   ```
 
@@ -816,24 +806,23 @@ CRUD 用户
 - 请求参数:
 
   ```json
-   {
-      "role": "管理员"
+  {
+    "role": "管理员"
   }
   ```
 
 - 响应参数:
 
   ```json
-   
   {
-      "msg": "角色更新成功",
-      "code": 200,
-      "data": {
-          "user": {
-              "id": 1,
-              "role": "管理员"
-          }
+    "msg": "角色更新成功",
+    "code": 200,
+    "data": {
+      "user": {
+        "id": 1,
+        "role": "管理员"
       }
+    }
   }
   ```
 
@@ -854,4 +843,4 @@ CRUD 用户
   }
   ```
 
-### 
+###

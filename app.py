@@ -23,7 +23,6 @@ def configured_app():
     jwt.init_app(app)
     app.secret_key = "1212"
      # Enable CORS for the app
-  
     import os
     db_path = os.path.join(os.path.dirname(__file__), 'test.sqlite3')
     uri  = 'sqlite:///' + db_path
@@ -44,7 +43,7 @@ def register_routes(app):
     用法如下
     """
     # 注册蓝图
-    app.register_blueprint(index_routes)
+    app.register_blueprint(index_routes, url_prefix='/user')
     app.register_blueprint(topic_routes, url_prefix='/topic')
     app.register_blueprint(reply_routes, url_prefix='/reply')
     app.register_blueprint(board_routes, url_prefix='/board')
