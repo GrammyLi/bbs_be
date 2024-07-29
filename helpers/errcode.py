@@ -1,5 +1,7 @@
 class ErrCode:
     ERROR_SUCCESS = 200
+   
+
 
     ERROR_VALIDATION_ERROR = 4000
     ERROR_WRONG_PASSWORD = 4001

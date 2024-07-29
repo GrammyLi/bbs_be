@@ -28,15 +28,22 @@ from utils import log
 
 main = Blueprint('user', __name__)
 
- 
+
 @main.route("/register", methods=['POST'])
 def register():
     form = request.form.to_dict()
-    # 用类函数来判断
+    log("form", form)
     u = User.register(form)
     if u is None:
-        return jsonify({'msg': '注册失败', "code": 201, "data": "null",  })
-    return jsonify({'msg': '注册成功', "code": 200, "data": u.to_dict(),  })
+        return HTTPHelper.generate_response(
+            code=ErrCode.ERROR_USER_NOT_EXISTS,
+            msg='注册失败',
+        )
+    return HTTPHelper.generate_response(
+        code=ErrCode.ERROR_SUCCESS,
+        msg='成功',
+        data=u.to_dict()
+    )
 
 
 @main.route("/login", methods=['POST'])
@@ -49,26 +56,15 @@ def login():
             msg='登录失败',
         )
     else:
-        # Session.new(form, user_id=u.id)
         token = create_access_token(identity=u.id)
-        # session_form = {
-        #     "user_id": u.id,
-        #     "token": token,
-        # }
-        # if u.session_id:
-            # 这里需要更新
-        # session['user_id'] = u.id
-        # session.permanent = True  # 设置 session 为永久
-       
-        # signature = token[:50];
-        # User.update(u.id,  signature=signature)
-        # return HTTPHelper.generate_response(
-        #     code=ErrCode.ERROR_SUCCESS,
-        #     msg='登录成功',
-        #     data=u.to_dict(),
-        #     token= str(token)
-        # )
-        pass
+        log("token", token)
+        Session.new(token=token, user_id=u.id)
+        return HTTPHelper.generate_response(
+            code=ErrCode.ERROR_SUCCESS,
+            msg='登录成功',
+            data=u.to_dict(),
+            token=str(token)
+        )
 
 
 @main.route('/profile')
@@ -80,3 +76,30 @@ def profile():
         data=u.to_dict()
     )
 
+
+@main.route('/detail')
+def detail():
+    u = current_user()
+    # TODO
+    # 如果能找到，对应
+    # 判断是否是管理员
+    id = request.args.get('user_id')
+    user = User.get(id)
+    return HTTPHelper.generate_response(
+        code=ErrCode.ERROR_SUCCESS,
+        msg='获取用户信息成功',
+        data=user.to_dict()
+    )
+
+
+@main.route("/update", methods=["POST"])
+def update():
+    form = request.get_json()
+    u = current_user()
+    # update
+    user = User.update(u.id, **form)
+    return HTTPHelper.generate_response(
+        code=ErrCode.ERROR_SUCCESS,
+        msg='获取用户信息成功',
+        data=user.to_dict()
+    )
