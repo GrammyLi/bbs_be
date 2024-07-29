@@ -28,6 +28,19 @@ from utils import log
 
 main = Blueprint('user', __name__)
 
+# def admin_required(fn):
+#     @wraps(fn)
+#     def wrapper(*args, **kwargs):
+#         user_id = get_jwt_identity()
+#         user = User.get(user_id)
+#         if user is None or not (user.is_admin() or user.is_super_admin()):
+#             return HTTPHelper.generate_response(
+#                 code=ErrCode.ERROR_AUTHORIZATION_REQUIRED,
+#                 msg='只有管理员或超级管理员才能执行此操作',
+#             )
+#         return fn(*args, **kwargs)
+#     return wrapper
+
 
 @main.route("/register", methods=['POST'])
 def register():
@@ -80,9 +93,11 @@ def profile():
 @main.route('/detail')
 def detail():
     u = current_user()
-    # TODO
-    # 如果能找到，对应
-    # 判断是否是管理员
+    if not u.is_admin() and not u.is_super_admin():
+        return HTTPHelper.generate_response(
+            code=ErrCode.ERROR_AUTHORIZATION_REQUIRED,
+            msg='只有管理员或超级管理员才能查看用户详情',
+        )
     id = request.args.get('user_id')
     user = User.get(id)
     return HTTPHelper.generate_response(
@@ -96,7 +111,11 @@ def detail():
 def update():
     form = request.get_json()
     u = current_user()
-    # update
+    if not u.is_admin() and not u.is_super_admin():
+        return HTTPHelper.generate_response(
+            code=ErrCode.ERROR_AUTHORIZATION_REQUIRED,
+            msg='只有管理员或超级管理员才能查看用户详情',
+        )
     user = User.update(u.id, **form)
     return HTTPHelper.generate_response(
         code=ErrCode.ERROR_SUCCESS,
