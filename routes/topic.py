@@ -6,6 +6,8 @@ from flask import (
     Blueprint,
     jsonify,
 )
+from helpers.errcode import ErrCode
+from helpers.http_helper import HTTPHelper
 
 from routes import *
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
@@ -22,14 +24,14 @@ main = Blueprint('topic', __name__)
 # TODO:  话题全部列表缓存
 # cache = redis.StrictRedis()
 
+
 def get_topic_with_username(topic):
     topic_dict = topic.to_dict()
-    user = topic.user()
-    topic_dict['username'] = user.username if user else 'Unknown'
+    topic_dict['username'] = topic.username()
     return topic_dict
 
 
-@main.route('/all')
+@main.route('/list')
 def index():
     board_id = int(request.args.get('board_id', -1))
     pg = int(request.args.get('pg', 1))  # 默认第1页
@@ -39,8 +41,11 @@ def index():
     else:
         total, topics = Topic.paginate(pg, sz, board_id=board_id)
     topics_dict = [get_topic_with_username(topic) for topic in topics]
-    return jsonify({'msg': '话题列表获取成功', "code": 200, "data": {'total': total, 'topics': topics_dict}})
-
+    return HTTPHelper.generate_response(
+        code=ErrCode.ERROR_SUCCESS,
+        msg='获取成功',
+        data=topics_dict
+    )
 
 
 @main.route('/detail')
@@ -49,17 +54,26 @@ def detail():
     topic = Topic.get(id)
     if topic:
         topic_dict = get_topic_with_username(topic)
-        return jsonify({'msg': '话题获取成功', "code": 200, "data": topic_dict})
+        return HTTPHelper.generate_response(
+            code=ErrCode.ERROR_SUCCESS,
+            msg='获取成功',
+            data=topic_dict
+        )
     else:
-        return jsonify({'msg': '话题不存在', "code": 404, "data": {}})
-    
+        return HTTPHelper.generate_response(
+            code=ErrCode.ERROR_SUCCESS,
+            msg='没有话题',
+            data={}
+        )
+
 
 @main.route("/add", methods=["POST"])
 def add():
     form = request.get_json()
     u = current_user()
-    print("u", u)
     m = Topic.new(form, user_id=u.id)
-    return jsonify({'msg': '话题获取成功', "code": 200, "data": m.to_dict()})
-
-
+    return HTTPHelper.generate_response(
+        code=ErrCode.ERROR_SUCCESS,
+        msg='获取成功',
+        data=m.to_dict()
+    )

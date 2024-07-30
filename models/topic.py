@@ -37,6 +37,10 @@ class Topic(SQLMixin, db.Model):
     def user(self):
         u = User.one(id=self.user_id)
         return u
+    
+    def username(self):
+        u = User.one(id=self.user_id)
+        return u.username
 
     def replies(self):
         ms = Reply.all(topic_id=self.id)
