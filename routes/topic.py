@@ -24,6 +24,8 @@ main = Blueprint('topic', __name__)
 # TODO:  话题全部列表缓存
 # cache = redis.StrictRedis()
 
+# 这里记得提问模块啊
+
 
 def get_topic_with_username(topic):
     topic_dict = topic.to_dict()
